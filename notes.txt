@@ -1,0 +1,51 @@
+1) add spring secuirty starter boot in pom.xml 
+
+2) create folder config inside com , place all configuration classes under config folder 
+
+3) create 1 class "MySecuritConfig" for security configuration  - spring security 
+
+4) your config class must have 2 annotation  
+	4.1) @Configurable 
+	4.2) @EnableWebSecurity 
+	
+5) extend this class with  -> WebSecurityConfigurerAdapter and override methods as per your need 
+
+6) now run application you can;t access any urls , to access urls we have default user created by spring
+   user is "user" and password you can find on your console 
+   
+   
+7) Next we add our own credentials for that we need to override method 
+	 we use inMemoryDataBase 
+	 
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("tejas").password(this.passwordEncoder().encode("tejas123"))
+				.roles("USER");// ROLE_USER
+		auth.inMemoryAuthentication().withUser("prisha").password(this.passwordEncoder().encode("tejas123"))
+				.roles("ADMIN");// ROLE_ADMIN
+	}
+	
+	
+	//for encrypted password  	
+    @Bean
+	public PasswordEncoder passwordEncoder() {
+
+		return new BCryptPasswordEncoder(10);// object
+	}
+	
+	
+8) next , we need to restrict few urls and few need to mark as public 
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+ 		http.authorizeRequests().antMatchers("/public/**").permitAll().anyRequest().authenticated().and().httpBasic();
+	}
+
+
+
+
+
+
+	
+	
+	

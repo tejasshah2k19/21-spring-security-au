@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 
@@ -24,8 +25,17 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
 //		http.authorizeRequests().antMatchers("/signup").permitAll().anyRequest().authenticated().and().httpBasic().and().antMatcher("/signup");
 //	
-
-		http.authorizeRequests().antMatchers("/public/**").permitAll().anyRequest().authenticated().and().httpBasic();
+		//authority -- role 
+		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+				.and()
+				.authorizeRequests().antMatchers("/public/**").permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/users/**").hasRole("USER")
+				.anyRequest().authenticated().and()
+				.formLogin();
+//				.loginPage("/public/login")
+//				.loginProcessingUrl("/public/authentication")
+//				;
 	}
 
 	// we want to add our username and password

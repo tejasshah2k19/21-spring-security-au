@@ -3,10 +3,12 @@ package com.controller;
 import java.util.ArrayList;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bean.UserBean;
 
+@RequestMapping("/users")
 @RestController
 public class ApiUserController {
 
@@ -24,4 +26,5 @@ public class ApiUserController {
 	public ArrayList<UserBean> getAllUsers() {
 		return users;
 	}
+
 }
