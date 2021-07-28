@@ -25,16 +25,11 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
 //		http.authorizeRequests().antMatchers("/signup").permitAll().anyRequest().authenticated().and().httpBasic().and().antMatcher("/signup");
 //	
-		//authority -- role 
-		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-				.and()
-				.authorizeRequests().antMatchers("/public/**").permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/users/**").hasRole("USER")
-				.anyRequest().authenticated().and()
-				.formLogin();
-//				.loginPage("/public/login")
-//				.loginProcessingUrl("/public/authentication")
+		// authority -- role
+		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
+				.antMatchers("/public/**").permitAll().antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/users/**").hasRole("USER").anyRequest().authenticated().and().formLogin()
+				.loginPage("/public/login").loginProcessingUrl("/public/authentication");
 //				;
 	}
 
@@ -54,7 +49,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	public BCryptPasswordEncoder passwordEncoder() {
 
 		return new BCryptPasswordEncoder(10);// object
 	}

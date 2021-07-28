@@ -16,7 +16,7 @@ public class ApiUserController {
 
 	public ApiUserController() {
 		UserBean u1 = new UserBean();
-		u1.setEmail("a@a.com");
+//		u1.setEmail("a@a.com");
 		u1.setPassword("aaa");
 		u1.setRole("USER");
 		users.add(u1);

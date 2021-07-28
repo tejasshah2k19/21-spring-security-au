@@ -24,7 +24,7 @@ public class UserController {
 
 	@PostMapping("/saveuser")
 	public String saveUser(UserBean userBean) {
-		System.out.println(userBean.getEmail());
+//		System.out.println(userBean.getEmail());
 		return "Home";
 	}
 }
