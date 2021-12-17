@@ -39,17 +39,17 @@ public class SessionController {
 	}
 
 	@PostMapping("/saveuser")
-	public String saveUser(UserBean user) {
+	public String saveUser(UserBean user) {//plain text password 
 		System.out.println(user.getUsername());
 		System.out.println("before => ");
 		System.out.println(user.getPassword());
-		user.setPassword(bcrypt.encode(user.getPassword()));
+		user.setPassword(bcrypt.encode(user.getPassword())); // royal -->324m23kj45hk454h45
 		
 		System.out.println("After => ");
-		System.out.println(user.getPassword());
+		System.out.println(user.getPassword()); //324m23kj45hk454h45
 		
-		user.setRole("ROLE_USER");
-		userRepo.save(user);
+		user.setRole("ROLE_USER");//
+		userRepo.save(user);//
 		return "redirect:/login";
 	}
 }

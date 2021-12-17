@@ -1,6 +1,8 @@
 package com.config;
 // .xml 
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 // .properties 
 // .java 
 
@@ -13,12 +15,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+
+import com.service.CustomUsersDetailService;
+
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpMethod;
 
 @Configurable
 @EnableWebSecurity
 public class MySecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Autowired
+	CustomUsersDetailService customUserDetailService;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -29,7 +37,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and().authorizeRequests()
 				.antMatchers("/public/**").permitAll().antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/users/**").hasRole("USER").anyRequest().authenticated().and().formLogin()
-				.loginPage("/public/login").loginProcessingUrl("/public/authentication");
+				.loginPage("/public/login").defaultSuccessUrl("/users/home");
+		// .usernameParameter("email");
 //				;
 	}
 
@@ -40,12 +49,16 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 	// 2) DB
 
 	// inMemory
-	@Override
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.inMemoryAuthentication().withUser("tejas").password(this.passwordEncoder().encode("tejas123"))
+//				.roles("USER");// ROLE_USER
+//		auth.inMemoryAuthentication().withUser("prisha").password(this.passwordEncoder().encode("tejas123"))
+//				.roles("ADMIN");// ROLE_ADMIN
+//	}
+
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().withUser("tejas").password(this.passwordEncoder().encode("tejas123"))
-				.roles("USER");// ROLE_USER
-		auth.inMemoryAuthentication().withUser("prisha").password(this.passwordEncoder().encode("tejas123"))
-				.roles("ADMIN");// ROLE_ADMIN
+		auth.userDetailsService(this.customUserDetailService).passwordEncoder(this.passwordEncoder());
 	}
 
 	@Bean
